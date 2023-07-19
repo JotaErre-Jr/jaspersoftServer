@@ -1,7 +1,13 @@
-FROM tomcat:8.5-jdk8-openjdk
+FROM tomcat:9.0-jdk8-openjdk
 
-# Copiar o arquivo WAR do Jaspersoft Server para o diretório webapps do Tomcat
-COPY jasperserver.war /usr/local/tomcat/webapps/
+# Instalar o pacote unzip
+RUN apt-get update && apt-get install -y unzip
+
+# Fazer o download do arquivo .zip do Jaspersoft Server diretamente no Dockerfile
+RUN curl -o /tmp/TIB_js-jrs-cp_8.1.1_bin.zip -L "https://sourceforge.net/projects/jasperserver/files/JasperServer/JasperReports%20Server%20Community%20Edition%20Service%20Pack%208.1.1/TIB_js-jrs-cp_8.1.1_bin.zip/download"
+
+# Descompactar o arquivo .zip
+RUN unzip /tmp/TIB_js-jrs-cp_8.1.1_bin.zip -d /usr/local/tomcat/webapps/jasperserver
 
 # Mover a pasta webapps para webapps2
 RUN mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2
